@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import time
-from pyspark import SparkContext
+import findspark 
+findspark.init() 
+import pyspark
+
+sc = pyspark.SparkContext(appName="Spark_RDD")
 
 def prepare_dataset(graph):
   graph = graph.filter(lambda x: "#" not in x)\
@@ -42,8 +46,7 @@ def Calculate_CCF(graph):
   print("Nombre d'itération : ", iteration)
   return graph
 
-sc = SparkContext.getOrCreate()
-dataset = SparkContext.getOrCreate().textFile("/usr/usr335/dataset.txt", use_unicode="False")
+dataset = sc.textFile("/usr/usr335/dataset.txt", use_unicode="False")
 graph = prepare_dataset(dataset)
 t1 = time.perf_counter()
 newPair = sc.accumulator(0)
