@@ -3,7 +3,6 @@
 
 import time
 from pyspark import SparkContext
-sc = SparkContext.getOrCreate()
 
 def prepare_dataset(graph):
   graph = graph.filter(lambda x: "#" not in x)\
@@ -43,6 +42,7 @@ def Calculate_CCF(graph):
   print("Nombre d'itération : ", iteration)
   return graph
 
+sc = SparkContext.getOrCreate()
 dataset = sc.textFile("/usr/usr335/web-Google.txt", use_unicode="False")
 graph = prepare_dataset(dataset)
 t1 = time.perf_counter()
