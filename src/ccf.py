@@ -43,7 +43,7 @@ def Calculate_CCF(graph):
   return graph
 
 sc = SparkContext.getOrCreate()
-dataset = SparkContext.getOrCreate().textFile("/usr/usr335/web-Google.txt", use_unicode="False")
+dataset = SparkContext.getOrCreate().textFile("/usr/usr335/dataset.txt", use_unicode="False")
 graph = prepare_dataset(dataset)
 t1 = time.perf_counter()
 newPair = sc.accumulator(0)
