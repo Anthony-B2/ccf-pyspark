@@ -39,12 +39,13 @@ def Calculate_CCF(graph):
       ccf_dedup_reduce.persist()
       if startPair == newPair.value:
           done = True
-      iteration += 1
+      iteration += 1  
       graph = ccf_dedup_reduce
   print("Nombre d'itération : ", iteration)
   return graph
 
 dataset = sc.textFile("/home/teamdev/spark/dataset.txt", use_unicode="False")
+dataset = dataset.repartition(100)
 graph = prepare_dataset(dataset)
 t1 = time.perf_counter()
 newPair = sc.accumulator(0)
