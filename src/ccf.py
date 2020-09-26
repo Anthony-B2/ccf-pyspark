@@ -45,7 +45,7 @@ def Calculate_CCF(graph):
   return graph
 
 dataset = sc.textFile("/home/teamdev/spark/dataset.txt", use_unicode="False")
-dataset = dataset.repartition(100)
+dataset = dataset.repartition(2)
 graph = prepare_dataset(dataset)
 t1 = time.perf_counter()
 newPair = sc.accumulator(0)
