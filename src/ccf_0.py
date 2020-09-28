@@ -30,7 +30,6 @@ def Calculate_CCF(graph):
   while not done:
       startPair = newPair.value
       ccf_iterate_map = graph.union(graph.map(lambda x : (x[1][0], [x[0]])))
-      ccf_iterate_map.persist()
       
       ccf_iterate_reduce_pair = ccf_iterate_map.reduceByKey(lambda x,y : x+y).map(lambda x : (x[0], x[1], min(x[0], min(x[1])))).filter(lambda x: x[0] != x[2])
       ccf_iterate_reduce_pair.foreach(countNewPair) 
@@ -38,17 +37,12 @@ def Calculate_CCF(graph):
                     .flatMapValues(lambda x : x)\
                     .filter(lambda x: x[0] != x[1])\
                     .map(lambda x : (x[0], [x[1]]))
-      ccf_iterate_reduce.persist()
 
       ccf_dedup_map = ccf_iterate_reduce.map(lambda x : (((x[0], x[1][0]),None)))
-      ccf_dedup_map.persist()
 
       ccf_dedup_reduce = ccf_dedup_map.groupByKey().map(lambda x : (x[0][0], [x[0][1]]))
-      ccf_dedup_reduce.persist()
 
       graph = ccf_dedup_reduce
-
-      graph = graph.coalesce(4)
 
       if startPair == newPair.value:
           done = True
@@ -60,7 +54,6 @@ def Calculate_CCF(graph):
   return graph
 
 dataset = sc.textFile("/home/teamdev/spark/dataset.txt", use_unicode="False")
-dataset = dataset.repartition(4)
 graph = prepare_dataset(dataset)
 partition_initiale = graph.getNumPartitions()
 t1 = time.perf_counter()
